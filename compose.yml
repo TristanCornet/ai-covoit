@@ -1,0 +1,53 @@
+services:
+
+  api:
+    build: 
+      context: ./api
+    container_name: api
+    working_dir: /usr/src/app
+    volumes:
+      - ./api:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+    tty: true
+    depends_on:
+      - database
+
+  database:
+    image: postgis/postgis:13-master
+    container_name: database
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: 'oclock'
+      POSTGRES_PASSWORD: 'passw0rd'
+      POSTGRES_DB: 'ai-covoit'
+      ALLOW_IP_RANGE: 0.0.0.0/0
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 5173:5173
+    working_dir: /usr/src/app
+    tty: true
+    depends_on:
+      - api
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    ports:
+      - 8080:8080
+    restart: always
+    depends_on:
+      - database
+    tty: true

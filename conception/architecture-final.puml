@@ -1,0 +1,59 @@
+@startuml architecture-final
+skinparam linetype ortho
+
+node "Frontend" {
+  component Client [
+    Frontend
+    React TS
+  ]
+}
+
+node "Backend" {
+  component APIGateway [
+    API Gateway
+  ]
+
+  component Authentification [
+    Authentification
+  ]
+  component Authorization [
+    Authorization
+  ]
+
+  component APIUsers [
+    API Users & Roles
+  ]
+  component APITravel [
+    API Travel
+  ]
+  component APIBooking [
+    API Booking
+  ]
+  component APIReview [
+    API Review
+  ]
+
+  database "PostgreSQL"
+  database "MongoDB"
+
+  port API
+  API -- [APIGateway]
+
+  [APIGateway] -- [Authentification]
+  [APIGateway] -- [Authorization]
+  [Authentification] -- [APIUsers]
+  [Authorization] -- [APIUsers]
+
+  [APIGateway] -- [APITravel]
+  [APIGateway] -- [APIBooking]
+  [APIGateway] -- [APIReview]
+
+  [APIUsers] -- [PostgreSQL]
+  [APITravel] -- [MongoDB]
+  [APIBooking] -- [MongoDB]
+  [APIReview] -- [MongoDB]
+}
+
+Client -- [API]
+
+@enduml

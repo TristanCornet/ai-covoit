@@ -1,0 +1,56 @@
+@startuml erd
+skinparam linetype ortho
+
+entity "User" {
+  *id
+  --
+  lastname
+  firstname
+  email
+  password
+  image
+}
+
+entity "Role" {
+  *id
+  --
+  name
+}
+
+entity "Travel" {
+  *id
+  --
+  description
+  start_location
+  end_location
+  date
+  price
+  capacity
+  detour_allowed
+}
+
+entity "Booking" {
+  *id
+  --
+  date
+  status
+  pickup_location
+  comment
+  nb_passengers
+}
+
+entity "Review" {
+  *id
+  --
+  date
+  rating
+  comment
+}
+
+User }o-|{ Role
+User ||--o{ Travel
+Travel ||-o{ Booking
+Booking }o--|| User
+Booking ||-o| Review
+
+@enduml
